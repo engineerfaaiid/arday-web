@@ -11,22 +11,22 @@
         h2 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 5px; }
         .status-tag { background: #e74c3c; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; }
         
-        /* The New Button Style */
-        .hit-button { 
+        /* The Professional Black Button */
+        .know-more-btn { 
             display: block; 
             width: 100%; 
             padding: 15px; 
             margin-top: 20px; 
-            background: #3498db; 
-            color: white; 
+            background: #000000; /* Pure Black */
+            color: #ffffff; 
             border: none; 
             border-radius: 8px; 
             font-size: 1.1em; 
-            font-weight: bold; 
+            font-weight: bold; /* Bold Text */
             cursor: pointer;
-            box-shadow: 0 4px 0 #2980b9;
+            transition: background 0.3s ease;
         }
-        .hit-button:active { transform: translateY(2px); box-shadow: 0 2px 0 #2980b9; }
+        .know-more-btn:active { background: #333333; transform: scale(0.98); }
     </style>
 </head>
 <body>
@@ -42,7 +42,7 @@
     <p><span class="status-tag">Upcoming</span> Testing Snapdragon X Plus efficiency (32GB Config).</p>
 </div>
 
-<button class="hit-button" onclick="showUpdate()">Click for Update</button>
+<button class="know-more-btn" onclick="welcomeMessage()">KNOW MORE</button>
 
 <div class="card">
     <h2>Academic Goals</h2>
@@ -58,8 +58,8 @@
 </footer>
 
 <script>
-    function showUpdate() {
-        alert("Welcome, we will give an update soon, Thanks!");
+    function welcomeMessage() {
+        alert("Welcome to Arday.so! We will provide a detailed research update soon. Thank you for your interest.");
     }
 </script>
 
