@@ -3,65 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arday.so | Physics & Systems</title>
+    <title>Arday | Journey & Growth</title>
     <style>
-        body { font-family: sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; background: #f4f4f4; }
-        header { background: #2c3e50; color: white; padding: 20px; text-align: center; border-radius: 8px; }
-        .card { background: white; padding: 20px; margin-top: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        h2 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 5px; }
-        .status-tag { background: #e74c3c; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; }
-        
-        /* The Professional Black Button */
-        .know-more-btn { 
-            display: block; 
-            width: 100%; 
-            padding: 15px; 
-            margin-top: 20px; 
-            background: #000000; /* Pure Black */
-            color: #ffffff; 
-            border: none; 
-            border-radius: 8px; 
-            font-size: 1.1em; 
-            font-weight: bold; /* Bold Text */
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-        .know-more-btn:active { background: #333333; transform: scale(0.98); }
+        :root { --deep-blue: #1a2a3a; --soft-gray: #fdfdfd; --accent: #2ecc71; }
+        body { font-family: 'Georgia', serif; line-height: 1.8; color: #444; background: var(--soft-gray); margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; align-items: center; justify-content: center; }
+        .container { max-width: 500px; padding: 40px; text-align: center; background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #eee; margin: 20px; }
+        h1 { color: var(--deep-blue); font-size: 2rem; margin-bottom: 10px; font-weight: normal; letter-spacing: 1px; }
+        .vision-text { font-style: italic; color: #777; margin-bottom: 30px; }
+        .heart-icon { color: #e74c3c; font-size: 1.5rem; margin-bottom: 20px; }
+        .hobby-card { background: #f9f9f9; padding: 20px; border-radius: 12px; border-left: 4px solid var(--deep-blue); text-align: left; margin-bottom: 20px; }
+        .hobby-title { font-weight: bold; color: var(--deep-blue); display: block; margin-bottom: 5px; }
+        .btn-future { display: inline-block; background: var(--deep-blue); color: white; padding: 12px 30px; border-radius: 50px; text-decoration: none; font-weight: bold; font-family: sans-serif; transition: 0.3s; margin-top: 10px; }
+        .btn-future:hover { background: #34495e; transform: scale(1.05); }
+        footer { margin-top: 20px; font-size: 0.8rem; color: #bbb; font-family: sans-serif; }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>Arday.so</h1>
-    <p>Physics Researcher & Developer</p>
-</header>
+<div class="container">
+    <div class="heart-icon">♥</div>
+    <h1>Welcome to the Journey</h1>
+    <p class="vision-text">"The page is no longer blank; it's a map for the future."</p>
 
-<div class="card">
-    <h2>Current Focus</h2>
-    <p>I am exploring <strong>Physics Computational Models</strong> and optimizing research workflows on <strong>ARM architectures</strong>.</p>
-    <p><span class="status-tag">Upcoming</span> Testing Snapdragon X Plus efficiency (32GB Config).</p>
+    <div class="hobby-card">
+        <span class="hobby-title">The Physics Hobby</span>
+        <p style="margin: 0; font-size: 0.95rem;">Building a space where Somali science meets modern technology. From calligraphy to computational physics, every step is progress.</p>
+    </div>
+
+    <div class="hobby-card" style="border-left-color: var(--accent);">
+        <span class="hobby-title">Future Willingness</span>
+        <p style="margin: 0; font-size: 0.95rem;">Preparing for the Snapdragon X Plus era. 32GB of potential waiting to be unlocked.</p>
+    </div>
+
+    <a href="#" class="btn-future" onclick="event.preventDefault(); alert('The future is being coded. Stay tuned!');">KNOW MORE</a>
+    
+    <footer>ARDAY.SO | 2026</footer>
 </div>
-
-<button class="know-more-btn" onclick="welcomeMessage()">KNOW MORE</button>
-
-<div class="card">
-    <h2>Academic Goals</h2>
-    <ul>
-        <li>Theoretical Physics Analysis</li>
-        <li>System Optimization</li>
-        <li>Somali Scientific Documentation</li>
-    </ul>
-</div>
-
-<footer style="text-align: center; margin-top: 30px; font-size: 0.8em; color: #7f8c8d;">
-    &copy; 2026 arday.so | Securely Deployed
-</footer>
-
-<script>
-    function welcomeMessage() {
-        alert("Welcome to Arday.so! We will provide a detailed research update soon. Thank you for your interest.");
-    }
-</script>
 
 </body>
 </html>
