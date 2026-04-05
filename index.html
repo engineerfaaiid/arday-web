@@ -10,33 +10,58 @@
         .card { background: white; padding: 20px; margin-top: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         h2 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 5px; }
         .status-tag { background: #e74c3c; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; }
+        
+        /* The New Button Style */
+        .hit-button { 
+            display: block; 
+            width: 100%; 
+            padding: 15px; 
+            margin-top: 20px; 
+            background: #3498db; 
+            color: white; 
+            border: none; 
+            border-radius: 8px; 
+            font-size: 1.1em; 
+            font-weight: bold; 
+            cursor: pointer;
+            box-shadow: 0 4px 0 #2980b9;
+        }
+        .hit-button:active { transform: translateY(2px); box-shadow: 0 2px 0 #2980b9; }
     </style>
 </head>
 <body>
 
 <header>
     <h1>Arday.so</h1>
-    <p>Ku soo Dhawoow boggaan</p>
+    <p>Physics Researcher & Developer</p>
 </header>
 
 <div class="card">
-    <h2>Qusaysa boggaan</h2>
-    <p>Waxaan ku hawlanahay<strong>Cilmiga Fiisikiska iyo Nuucyadiisa</strong> iyo Cilmi baarisyo kale oo kuseeya<strong>Cilmiyada aas-aasiga ah</strong>.</p>
-    <p><span class="status-tag">Mardhow</span> Naga filow wax ku farxad geliya.>
+    <h2>Current Focus</h2>
+    <p>I am exploring <strong>Physics Computational Models</strong> and optimizing research workflows on <strong>ARM architectures</strong>.</p>
+    <p><span class="status-tag">Upcoming</span> Testing Snapdragon X Plus efficiency (32GB Config).</p>
 </div>
 
+<button class="hit-button" onclick="showUpdate()">Click for Update</button>
+
 <div class="card">
-    <h2>Hadafkeenu waa:-</h2>
+    <h2>Academic Goals</h2>
     <ul>
-        <li>Faham Aqoonta kala duwan</li>
-        <li>Helitaanka maktabad Afka hooyo ku qoran</li>
-        <li>Cilmi-baarisyo ku saabsan dadkeena iyo dhulkeena</li>
+        <li>Theoretical Physics Analysis</li>
+        <li>System Optimization</li>
+        <li>Somali Scientific Documentation</li>
     </ul>
 </div>
 
 <footer style="text-align: center; margin-top: 30px; font-size: 0.8em; color: #7f8c8d;">
     &copy; 2026 arday.so | Securely Deployed
 </footer>
+
+<script>
+    function showUpdate() {
+        alert("Welcome, we will give an update soon, Thanks!");
+    }
+</script>
 
 </body>
 </html>
