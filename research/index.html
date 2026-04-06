@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arday | Research Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink:   #0d1117;
+            --panel: #131b24;
+            --edge:  rgba(255,255,255,0.06);
+            --gold:  #c9a84c;
+            --gold2: #e8c96a;
+            --green: #3ecf8e;
+            --blue:  #4a9eda;
+            --red:   #e05c5c;
+            --paper: #f0ece4;
+            --muted: #6b7280;
+            --text:  #c9d1d9;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--ink);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding: 28px 16px 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Background */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 70% 50% at 10% 10%, rgba(201,168,76,0.06) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 70% at 90% 80%, rgba(62,207,142,0.04) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .page { position: relative; z-index: 1; width: 100%; max-width: 520px; }
+
+        /* Nav */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 36px;
+            opacity: 0;
+            animation: rise 0.5s ease 0.05s forwards;
+        }
+
+        .nav-back {
+            display: flex; align-items: center; gap: 7px;
+            text-decoration: none;
+            color: var(--muted);
+            font-family: 'DM Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.04em;
+            transition: color 0.25s;
+        }
+        .nav-back:hover { color: var(--gold); }
+        .nav-back svg { transition: transform 0.25s; }
+        .nav-back:hover svg { transform: translateX(-3px); }
+
+        .version-pill {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 0.12em;
+            color: var(--green);
+            border: 1px solid rgba(62,207,142,0.25);
+            padding: 3px 10px;
+            border-radius: 20px;
+            background: rgba(62,207,142,0.05);
+        }
+
+        /* Header */
+        .header {
+            margin-bottom: 32px;
+            opacity: 0;
+            animation: rise 0.5s ease 0.15s forwards;
+        }
+
+        .header-eyebrow {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.25em;
+            color: var(--gold);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .header-eyebrow::after {
+            content: '';
+            flex: 1; height: 1px;
+            background: linear-gradient(90deg, rgba(201,168,76,0.4), transparent);
+        }
+
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.4rem, 7vw, 3.2rem);
+            font-weight: 400;
+            color: var(--paper);
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+        .header h1 em { font-style: italic; color: var(--gold); }
+
+        .header-sub {
+            font-size: 0.82rem;
+            color: var(--muted);
+            margin-top: 10px;
+            font-weight: 300;
+            line-height: 1.6;
+        }
+
+        /* Category tabs */
+        .tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: rise 0.5s ease 0.25s forwards;
+        }
+
+        .tab {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.68rem;
+            letter-spacing: 0.08em;
+            padding: 7px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--edge);
+            background: transparent;
+            color: var(--muted);
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+        .tab:hover { border-color: rgba(201,168,76,0.3); color: var(--gold); }
+        .tab.active {
+            background: rgba(201,168,76,0.1);
+            border-color: rgba(201,168,76,0.4);
+            color: var(--gold);
+        }
+
+        /* Converter panels */
+        .panel-wrap {
+            opacity: 0;
+            animation: rise 0.5s ease 0.35s forwards;
+        }
+
+        .converter-panel {
+            display: none;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .converter-panel.active { display: flex; }
+
+        /* Converter card */
+        .conv-card {
+            background: var(--panel);
+            border: 1px solid var(--edge);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: border-color 0.3s ease, transform 0.3s ease;
+        }
+        .conv-card:hover {
+            border-color: rgba(201,168,76,0.2);
+            transform: translateY(-1px);
+        }
+
+        .conv-card-head {
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--edge);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255,255,255,0.015);
+        }
+
+        .conv-icon {
+            width: 30px; height: 30px;
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .conv-title {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--paper);
+        }
+        .conv-desc {
+            font-size: 0.68rem;
+            color: var(--muted);
+            font-family: 'DM Mono', monospace;
+        }
+
+        .conv-card-body { padding: 18px 20px; }
+
+        /* Input row */
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 10px;
+            align-items: end;
+            margin-bottom: 14px;
+        }
+
+        .field { display: flex; flex-direction: column; gap: 5px; }
+        .field label {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 0.12em;
+            color: var(--gold);
+            text-transform: uppercase;
+        }
+
+        .field input, .field select {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px;
+            padding: 10px 12px;
+            color: var(--paper);
+            font-family: 'DM Mono', monospace;
+            font-size: 0.9rem;
+            width: 100%;
+            outline: none;
+            transition: border-color 0.25s, background 0.25s;
+            -webkit-appearance: none;
+        }
+        .field input:focus, .field select:focus {
+            border-color: rgba(201,168,76,0.4);
+            background: rgba(201,168,76,0.04);
+        }
+        .field input::placeholder { color: rgba(255,255,255,0.15); }
+
+        .field select option { background: #1a2332; }
+
+        .arrow-btn {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            background: rgba(201,168,76,0.1);
+            border: 1px solid rgba(201,168,76,0.25);
+            color: var(--gold);
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.25s ease;
+            flex-shrink: 0;
+            margin-bottom: 2px;
+        }
+        .arrow-btn:hover {
+            background: rgba(201,168,76,0.2);
+            transform: scale(1.1);
+        }
+
+        /* Result */
+        .result-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 14px;
+            background: rgba(62,207,142,0.06);
+            border: 1px solid rgba(62,207,142,0.15);
+            border-radius: 10px;
+            min-height: 44px;
+        }
+
+        .result-val {
+            font-family: 'DM Mono', monospace;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--green);
+        }
+
+        .result-empty {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.72rem;
+            color: var(--muted);
+        }
+
+        .result-formula {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.62rem;
+            color: var(--muted);
+        }
+
+        /* Research log */
+        .log-card {
+            background: var(--panel);
+            border: 1px solid var(--edge);
+            border-radius: 20px;
+            overflow: hidden;
+            margin-top: 20px;
+            opacity: 0;
+            animation: rise 0.5s ease 0.5s forwards;
+        }
+
+        .log-head {
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--edge);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255,255,255,0.015);
+        }
+
+        .log-title {
+            display: flex; align-items: center; gap: 8px;
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--paper);
+        }
+
+        .log-badge {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.58rem;
+            color: var(--blue);
+            border: 1px solid rgba(74,158,218,0.25);
+            padding: 2px 7px;
+            border-radius: 10px;
+            letter-spacing: 0.08em;
+        }
+
+        .log-body { padding: 18px 20px; }
+
+        .log-body textarea {
+            width: 100%;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 12px;
+            padding: 14px;
+            color: var(--text);
+            font-family: 'DM Mono', monospace;
+            font-size: 0.8rem;
+            line-height: 1.7;
+            resize: vertical;
+            min-height: 110px;
+            outline: none;
+            transition: border-color 0.25s;
+        }
+        .log-body textarea:focus {
+            border-color: rgba(74,158,218,0.3);
+        }
+        .log-body textarea::placeholder { color: rgba(255,255,255,0.12); }
+
+        .log-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .btn-save {
+            flex: 1;
+            padding: 11px;
+            background: linear-gradient(135deg, var(--gold), var(--gold2));
+            color: var(--ink);
+            border: none;
+            border-radius: 10px;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 500;
+            font-size: 0.82rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+        .btn-save:hover { filter: brightness(1.1); transform: translateY(-1px); }
+
+        .btn-clear {
+            padding: 11px 16px;
+            background: transparent;
+            color: var(--muted);
+            border: 1px solid var(--edge);
+            border-radius: 10px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.82rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+        .btn-clear:hover { border-color: rgba(224,92,92,0.3); color: var(--red); }
+
+        /* Saved notes */
+        .saved-notes { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+
+        .note-item {
+            padding: 10px 14px;
+            background: rgba(255,255,255,0.025);
+            border: 1px solid var(--edge);
+            border-radius: 10px;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text);
+            line-height: 1.5;
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            animation: rise 0.3s ease forwards;
+        }
+        .note-delete {
+            color: var(--muted);
+            cursor: pointer;
+            font-size: 0.7rem;
+            flex-shrink: 0;
+            transition: color 0.2s;
+        }
+        .note-delete:hover { color: var(--red); }
+
+        /* Footer */
+        footer {
+            margin-top: 44px;
+            text-align: center;
+            opacity: 0;
+            animation: rise 0.5s ease 0.65s forwards;
+        }
+        .footer-brand {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            color: rgba(255,255,255,0.06);
+            letter-spacing: 0.15em;
+            margin-bottom: 6px;
+        }
+        .footer-copy {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.6rem;
+            color: rgba(255,255,255,0.15);
+            letter-spacing: 0.1em;
+        }
+
+        /* Animation */
+        @keyframes rise {
+            from { opacity: 0; transform: translateY(18px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 420px) {
+            .input-row { grid-template-columns: 1fr; }
+            .arrow-btn { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="page">
+
+    <!-- Nav -->
+    <nav>
+        <a href="/" class="nav-back">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M9 2L4 7L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Return Home
+        </a>
+        <span class="version-pill">LAB v2.0</span>
+    </nav>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="header-eyebrow">Arday Research</div>
+        <h1>Metric <em>Lab</em></h1>
+        <p class="header-sub">Full scientific measurement conversion — distance, mass, temperature, volume, speed, pressure, energy, and time.</p>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs" id="tabs">
+        <button class="tab active" onclick="switchTab('distance', this)">Distance</button>
+        <button class="tab" onclick="switchTab('mass', this)">Mass</button>
+        <button class="tab" onclick="switchTab('temperature', this)">Temp</button>
+        <button class="tab" onclick="switchTab('volume', this)">Volume</button>
+        <button class="tab" onclick="switchTab('speed', this)">Speed</button>
+        <button class="tab" onclick="switchTab('pressure', this)">Pressure</button>
+        <button class="tab" onclick="switchTab('energy', this)">Energy</button>
+        <button class="tab" onclick="switchTab('time', this)">Time</button>
+    </div>
+
+    <!-- Converter panels -->
+    <div class="panel-wrap">
+
+        <!-- DISTANCE -->
+        <div class="converter-panel active" id="panel-distance">
+            <div class="conv-card">
+                <div class="conv-card-head">
+                    <div class="conv-icon" style="background:rgba(201,168,76,0.12)">📏</div>
+                    <div>
+                        <div class="conv-title">Distance</div>
+                        <div class="conv-desc">mm · cm · m · km · mi · ft · in · yd</div>
+                    </div>
+                </div>
+                <div class="conv-card-body">
+                    <div class="input-row">
+                        <div class="field">
+                            <label>Value</label>
+                            <input type="number" id="dist-val" placeholder="0" oninput="convertDist()">
+                        </div>
+                        <button class="arrow-btn" onclick="swapDist()">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                <path d="M2 5H12M9 2L12 5L9 8M12 9H2M5 6L2 9L5 12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                        <div class="field">
+                            <label>From → To</label>
+                            <select id="dist-from" onchange="convertDist()">
+                                <option value="mm">Millimeter (mm)</option>
+                                <option value="cm">Centimeter (cm)</option>
+                                <option value="m" selected>Meter (m)</option>
+                                <option value="km">Kilometer (km)</option>
+                                <option value="mi">Mile (mi)</option>
+                                <option value="ft">Foot (ft)</option>
+                                <option value="in">Inch (in)</option>
+                                <option value="yd">Yard (yd)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="field" style="margin-bottom:14px">
+                        <label>Convert To</label>
+                        <select id="dist-to" onchange="convertDist()">
+                            <option value="mm">Millimeter (mm)</option>
+                            <option value="cm">Centimeter (cm)</option>
+                            <option value="m">Meter (m)</option>
+                            <option value="km" selected>Kilometer (km)</option>
+                            <option value="mi">Mile (mi)</option>
+                            <option value="ft">Foot (ft)</option>
+                            <option value="in">Inch (in)</option>
+                            <option value="yd">Yard (yd)</option>
+                        </select>
+                    </div>
+                    <div class="result-bar" id="dist-result">
+                        <span class="result-empty">Enter a value above</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MASS -->
+        <div class="converter-panel" id="panel-mass">
+            <div class="conv-card">
+                <div class="conv-card-head">
+                    <div class="conv-icon" style="background:rgba(74,158,218,0.12)">⚖️</div>
+                    <div>
+                        <div class="conv-title">Mass / Weight</div>
+                        <div class="conv-desc">mg · g · kg · t · lb · oz · st</div>
+                    </div>
+                </div>
+                <div class="conv-card-body">
+                    <div class="input-row">
+                        <div class="field">
+                            <label>Value</label>
+                            <input type="number" id="mass-val" placeholder="0" oninput="convertMass()">
+                        </div>
+                        <button class="arrow-btn" onclick="swapMass()">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                <path d="M2 5H12M9 2L12 5L9 8M12 9H2M5 6L2 9L5 12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                        <div class="field">
+                            <label>From</label>
+                            <select id="mass-from" onchange="convertMass()">
+                                <option value="mg">Milligram (mg)</option>
+                                <option value="g">Gram (g)</option>
+                                <option value="kg" selected>Kilogram (kg)</option>
+                                <option value="t">Metric Ton (t)</option>
+                                <option value="lb">Pound (lb)</option>
+                                <option value="oz">Ounce (oz)</option>
+                                <option value="st">Stone (st)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="field" style="margin-bottom:14px">
+                        <label>Convert To</label>
+                        <select id="mass-to" onchange="convertMass()">
+                            <option value="mg">Milligram (mg)</option>
+                            <option value="g">Gram (g)</option>
+                            <option value="kg">Kilogram (kg)</option>
+                            <option value="t">Metric Ton (t)</option>
+                            <option value="lb" selected>Pound (lb)</option>
+                            <option value="oz">Ounce (oz)</option>
+                            <option value="st">Stone (st)</option>
+                        </select>
+                    </div>
+                    <div class="result-bar" id="mass-result">
+                        <span class="result-empty">Enter a value above</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TEMPERATURE -->
+        <div class="converter-panel" id="panel-temperature">
+            <div class="conv-card">
+                <div class="conv-card-head">
+                    <div class="conv-icon" style="background:rgba(224,92,92,0.12)">🌡️</div>
+                    <div>
+                        <div class="conv-title">Temperature</div>
+                        <div class="conv-desc">°C · °F · K · °R</div>
+                    </div>
+                </div>
+                <div class="conv-card-body">
+                    <div class="input-row">
+                        <div class="field">
+                            <label>Value</label>
+                            <input type="number" id="temp-val" placeholder="0" oninput="convertTemp()">
+                        </div>
+                        <button class="arrow-btn" onclick="swapTemp()">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                <path d="M2 5H12M9 2L12 5L9 8M12 9H2M5 6L2 9L5 12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                        <div class="field">
+                            <label>From</label>
+                            <select id="temp-from" onchange="convertTemp()">
+                                <option value="c" selected>Celsius (°C)</option>
+                                <option value="f">Fahrenheit (°F)</option>
+                                <option value="k">Kelvin (K)</option>
+                                <option value="r">Rankine (°R)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="field" style="margin-bottom:14px">
+                        <label>Convert To</label>
+                        <select id="temp-to" onchange="convertTemp()">
+                            <option value="c">Celsius (°C)</option>
+                            <option value="f" selected>Fahrenheit (°F)</option>
+                            <option value="k">Kelvin (K)</option>
+                            <option value="r">Rankine (°R)</option>
+                        </select>
+                    </div>
+                    <div class="result-bar" id="temp-result">
+                        <span class="result-empty">Enter a value above</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VOLUME -->
+        <div class="converter-panel" id="panel-volume">
+            <div class="conv-card">
+                <div class="conv-card-head">
+                    <div class="conv-icon" style="background:rgba(62,207,142,0.12)">🧪</div>
+                    <div>
+                        <div class="conv-title">Volume</div>
+                        <div class="conv-desc">mL · L · m³ · cm³ · fl oz · gal · pt</div>
+                    </div>
+                </div>
+                <div class="conv-card-body">
+                    <div class="input-row">
+                        <div class="field">
+                            <label>Value</label>
+                            <input type="number" id="vol-val" placeholder="0" oninput="convertVol()">
+                        </div>
+                        <button class="arrow-btn" onclick="swapVol()">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                <path d="M2 5H12M9 2L12 5L9 8M12 9H2M5 6L2 9L5 12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                        <div class="field">
+                            <label>From</label>
+                            <select id="vol-from" onchange="convertVol()">
+                                <option value="ml">Milliliter (mL)</option>
+                                <option value="l" selected>Liter (L)</option>
+                                <option value="m3">Cubic Meter (m³)</option>
+                                <option value="cm3">Cubic Cm (cm³)</option>
+                                <option value="floz">Fl. Ounce (fl oz)</option>
+                                <option value="gal">Gallon (gal)</option>
+                                <option value="pt">Pint (pt)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="field" style="margin-bottom:14px">
+                        <label>Convert To</label>
+                        <select id="vol-to" onchange="convertVol()">
+                            <option value="ml">Milliliter (mL)</option>
+                            <option value="l">Liter (L)</option>
+                            <option value="m3">Cubic Meter (m³)</option>
+                            <option value="cm3">Cubic Cm (cm³)</option>
+                            <option value="floz" selected>Fl. Ounce (fl oz)</option>
+                            <option value="gal">Gallon (gal)</option>
+                            <option value="pt">Pint (pt)</option>
+                        </select>
+                    </div>
+                    <div class="result-bar" id="vol-result">
+                        <span class="result-empty">Enter a value above</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SPEED -->
+        <div class="converter-panel" id="panel-speed">
+            <div class="conv-card">
+                <div class="conv-card-head">
+                    <div class="conv-icon" style="background:rgba(201,168,76,0.12)">⚡</div>
+                    <div>
+                        <div class="conv-title">Speed</div>
+                        <div class="conv-desc">m/s · km/h · mph · knot · ft/s</div>
+                    </div>
+                </div>
+                <div class="conv-card-body">
+                    <div class="input-row">
+                        <div class="field">
+                            <label>Value</label>
+                            <input type="number" id="spd-val" placeholder="0" oninput="convertSpd()">
+                        </div>
+                        <button class="arrow-btn" onclick="swapSpd()">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                <path d="M2 5H12M9 2L12 5L9 8M12 9H2M5 6L2 9L5 12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                        <div class="field">
+                            <label>From</label>
+                            <select id="spd-from" onchange="convertSpd()">
+                                <option value="ms" selected>m/s</option>
+                                <option value="kmh">km/h</option>
+                                <option value="mph">mph</option>
+                                <option value="kn">Knot</option>
+                                <option value="fts">ft/s</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="field" style="margin-bottom:14px">
+                        <label>Convert To</label>
+                        <select id="spd-to" onchange="convertSpd()">
+                            <option value="ms">m/s</option>
+                            <option value="kmh" selected>km/h</option>
+                            <option value="mph">mph</option>
+                            <option value="kn">Knot</option>
+                            <option value="fts">ft/s</option>
+                        </select>
+                    </div>
+                    <div class="result-bar" id="spd-result">
+                        <span class="result-empty">Enter a value above</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PRESSURE -->
+        <div class="converter-panel" id="panel-pressure">
+            <div class="conv-card">
+                <div class="conv-card-head">
+                    <div class="conv-icon" style="background:rgba(74,158,218,0.12)">🔬</div>
+                    <div>
+                        <div class="conv-title">Pressure</div>
+                        <div class="conv-desc">Pa · kPa · MPa · bar · atm · psi · mmHg</div>
+                    </div>
+                </div>
+                <div class="conv-card-body">
+                    <div class="input-row">
+                        <div class="field">
+                            <label>Value</label>
+                            <input type="number" id="pres-val" placeholder="0" oninput="convertPres()">
+                        </div>
+                        <button class="arrow-btn" onclick="swapPres()">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                <path d="M2 5H12M9 2L12 5L9 8M12 9H2M5 6L2 9L5 12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                        <div class="field">
+                            <label>From</label>
+                            <select id="pres-from" onchange="convertPres()">
+                                <option value="pa">Pascal (Pa)</option>
+                                <option value="kpa">Kilopascal (kPa)</option>
+                                <option value="mpa">Megapascal (MPa)</option>
+                                <option value="bar">Bar</option>
+                                <option value="atm" selected>Atmosphere (atm)</option>
+                                <option value="psi">PSI</option>
+                                <option value="mmhg">mmHg (Torr)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="field" style="margin-bottom:14px">
+                        <label>Convert To</label>
+                        <select id="pres-to" onchange="convertPres()">
+                            <option value="pa">Pascal (Pa)</option>
+                            <option value="kpa">Kilopascal (kPa)</option>
+                            <option value="mpa">Megapascal (MPa)</option>
+                            <option value="bar">Bar</option>
+                            <option value="atm">Atmosphere (atm)</option>
+                            <option value="psi" selected>PSI</option>
+                            <option value="mmhg">mmHg (Torr)</option>
+                        </select>
+                    </div>
+                    <div class="result-bar" id="pres-result">
+                        <span class="result-empty">Enter a value above</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ENERGY -->
+        <div class="converter-panel" id="panel-energy">
+            <div class="conv-card">
+                <div class="conv-card-head">
+                    <div class="conv-icon" style="background:rgba(62,207,142,0.12)">⚛️</div>
+                    <div>
+                        <div class="conv-title">Energy</div>
+                        <div class="conv-desc">J · kJ · cal · kcal · Wh · kWh · eV · BTU</div>
+                    </div>
+                </div>
+                <div class="conv-card-body">
+                    <div class="input-row">
+                        <div class="field">
+                            <label>Value</label>
+                            <input type="number" id="ene-val" placeholder="0" oninput="convertEne()">
+                        </div>
+                        <button class="arrow-btn" onclick="swapEne()">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                <path d="M2 5H12M9 2L12 5L9 8M12 9H2M5 6L2 9L5 12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                        <div class="field">
+                            <label>From</label>
+                            <select id="ene-from" onchange="convertEne()">
+                                <option value="j" selected>Joule (J)</option>
+                                <option value="kj">Kilojoule (kJ)</option>
+                                <option value="cal">Calorie (cal)</option>
+                                <option value="kcal">Kilocalorie (kcal)</option>
+                                <option value="wh">Watt-hour (Wh)</option>
+                                <option value="kwh">kWh</option>
+                                <option value="ev">Electronvolt (eV)</option>
+                                <option value="btu">BTU</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="field" style="margin-bottom:14px">
+                        <label>Convert To</label>
+                        <select id="ene-to" onchange="convertEne()">
+                            <option value="j">Joule (J)</option>
+                            <option value="kj">Kilojoule (kJ)</option>
+                            <option value="cal" selected>Calorie (cal)</option>
+                            <option value="kcal">Kilocalorie (kcal)</option>
+                            <option value="wh">Watt-hour (Wh)</option>
+                            <option value="kwh">kWh</option>
+                            <option value="ev">Electronvolt (eV)</option>
+                            <option value="btu">BTU</option>
+                        </select>
+                    </div>
+                    <div class="result-bar" id="ene-result">
+                        <span class="result-empty">Enter a value above</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TIME -->
+        <div class="converter-panel" id="panel-time">
+            <div class="conv-card">
+                <div class="conv-card-head">
+                    <div class="conv-icon" style="background:rgba(201,168,76,0.12)">⏱️</div>
+                    <div>
+                        <div class="conv-title">Time</div>
+                        <div class="conv-desc">ns · μs · ms · s · min · hr · day · wk · yr</div>
+                    </div>
+                </div>
+                <div class="conv-card-body">
+                    <div class="input-row">
+                        <div class="field">
+                            <label>Value</label>
+                            <input type="number" id="time-val" placeholder="0" oninput="convertTime()">
+                        </div>
+                        <button class="arrow-btn" onclick="swapTime()">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                <path d="M2 5H12M9 2L12 5L9 8M12 9H2M5 6L2 9L5 12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                        <div class="field">
+                            <label>From</label>
+                            <select id="time-from" onchange="convertTime()">
+                                <option value="ns">Nanosecond (ns)</option>
+                                <option value="us">Microsecond (μs)</option>
+                                <option value="ms">Millisecond (ms)</option>
+                                <option value="s">Second (s)</option>
+                                <option value="min" selected>Minute (min)</option>
+                                <option value="hr">Hour (hr)</option>
+                                <option value="day">Day</option>
+                                <option value="wk">Week</option>
+                                <option value="yr">Year</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="field" style="margin-bottom:14px">
+                        <label>Convert To</label>
+                        <select id="time-to" onchange="convertTime()">
+                            <option value="ns">Nanosecond (ns)</option>
+                            <option value="us">Microsecond (μs)</option>
+                            <option value="ms">Millisecond (ms)</option>
+                            <option value="s" selected>Second (s)</option>
+                            <option value="min">Minute (min)</option>
+                            <option value="hr">Hour (hr)</option>
+                            <option value="day">Day</option>
+                            <option value="wk">Week</option>
+                            <option value="yr">Year</option>
+                        </select>
+                    </div>
+                    <div class="result-bar" id="time-result">
+                        <span class="result-empty">Enter a value above</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- end panel-wrap -->
+
+    <!-- Research Log -->
+    <div class="log-card">
+        <div class="log-head">
+            <div class="log-title">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <path d="M2 2H10L12 4V12H2V2Z" stroke="#4a9eda" stroke-width="1.3" stroke-linejoin="round"/>
+                    <path d="M4 6H9M4 8H7" stroke="#4a9eda" stroke-width="1.2" stroke-linecap="round"/>
+                </svg>
+                Research Log
+            </div>
+            <span class="log-badge">SOMALI / EN</span>
+        </div>
+        <div class="log-body">
+            <textarea id="log-input" placeholder="Write notes in Somali or English — e.g. Xisaabinta xawaaraha iftiinka: 299,792,458 m/s..."></textarea>
+            <div class="log-actions">
+                <button class="btn-save" onclick="saveNote()">Save Note</button>
+                <button class="btn-clear" onclick="clearLog()">Clear</button>
+            </div>
+            <div class="saved-notes" id="saved-notes"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-brand">ARDAY</div>
+        <div class="footer-copy">© 2026 ARDAY.SO — RESEARCH LAB</div>
+    </footer>
+
+</div>
+
+<script>
+// ─── TAB SWITCHER ───────────────────────────────────────────────
+function switchTab(id, el) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.converter-panel').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('panel-' + id).classList.add('active');
+}
+
+// ─── FORMAT NUMBER ───────────────────────────────────────────────
+function fmt(n) {
+    if (n === null || isNaN(n)) return null;
+    const abs = Math.abs(n);
+    if (abs === 0) return '0';
+    if (abs < 0.0001 || abs >= 1e10) return n.toExponential(6);
+    const dec = abs < 1 ? 6 : abs < 1000 ? 4 : 2;
+    return parseFloat(n.toFixed(dec)).toLocaleString();
+}
+
+function showResult(id, val, fromUnit, toUnit) {
+    const el = document.getElementById(id);
+    if (val === null || val === '') {
+        el.innerHTML = '<span class="result-empty">Enter a value above</span>';
+        return;
+    }
+    el.innerHTML = `<span class="result-val">${val}</span><span class="result-formula">${fromUnit} → ${toUnit}</span>`;
+}
+
+// ─── DISTANCE ────────────────────────────────────────────────────
+const distToM = { mm:0.001, cm:0.01, m:1, km:1000, mi:1609.344, ft:0.3048, in:0.0254, yd:0.9144 };
+function convertDist() {
+    const v = parseFloat(document.getElementById('dist-val').value);
+    const f = document.getElementById('dist-from').value;
+    const t = document.getElementById('dist-to').value;
+    if (isNaN(v)) { showResult('dist-result', null); return; }
+    const res = v * distToM[f] / distToM[t];
+    showResult('dist-result', fmt(res), f.toUpperCase(), t.toUpperCase());
+}
+function swapDist() {
+    const f = document.getElementById('dist-from'), t = document.getElementById('dist-to');
+    [f.value, t.value] = [t.value, f.value]; convertDist();
+}
+
+// ─── MASS ─────────────────────────────────────────────────────────
+const massToKg = { mg:1e-6, g:0.001, kg:1, t:1000, lb:0.453592, oz:0.0283495, st:6.35029 };
+function convertMass() {
+    const v = parseFloat(document.getElementById('mass-val').value);
+    const f = document.getElementById('mass-from').value;
+    const t = document.getElementById('mass-to').value;
+    if (isNaN(v)) { showResult('mass-result', null); return; }
+    showResult('mass-result', fmt(v * massToKg[f] / massToKg[t]), f.toUpperCase(), t.toUpperCase());
+}
+function swapMass() {
+    const f = document.getElementById('mass-from'), t = document.getElementById('mass-to');
+    [f.value, t.value] = [t.value, f.value]; convertMass();
+}
+
+// ─── TEMPERATURE ─────────────────────────────────────────────────
+function convertTemp() {
+    const v = parseFloat(document.getElementById('temp-val').value);
+    const f = document.getElementById('temp-from').value;
+    const t = document.getElementById('temp-to').value;
+    if (isNaN(v)) { showResult('temp-result', null); return; }
+    let celsius;
+    if (f==='c') celsius=v; else if (f==='f') celsius=(v-32)*5/9; else if (f==='k') celsius=v-273.15; else celsius=(v-491.67)*5/9;
+    let res;
+    if (t==='c') res=celsius; else if (t==='f') res=celsius*9/5+32; else if (t==='k') res=celsius+273.15; else res=(celsius+273.15)*9/5;
+    const labels = {c:'°C', f:'°F', k:'K', r:'°R'};
+    showResult('temp-result', fmt(res) + ' ' + labels[t], labels[f], labels[t]);
+}
+function swapTemp() {
+    const f = document.getElementById('temp-from'), t = document.getElementById('temp-to');
+    [f.value, t.value] = [t.value, f.value]; convertTemp();
+}
+
+// ─── VOLUME ──────────────────────────────────────────────────────
+const volToL = { ml:0.001, l:1, m3:1000, cm3:0.001, floz:0.0295735, gal:3.78541, pt:0.473176 };
+function convertVol() {
+    const v = parseFloat(document.getElementById('vol-val').value);
+    const f = document.getElementById('vol-from').value;
+    const t = document.getElementById('vol-to').value;
+    if (isNaN(v)) { showResult('vol-result', null); return; }
+    showResult('vol-result', fmt(v * volToL[f] / volToL[t]), f.toUpperCase(), t.toUpperCase());
+}
+function swapVol() {
+    const f = document.getElementById('vol-from'), t = document.getElementById('vol-to');
+    [f.value, t.value] = [t.value, f.value]; convertVol();
+}
+
+// ─── SPEED ───────────────────────────────────────────────────────
+const spdToMs = { ms:1, kmh:1/3.6, mph:0.44704, kn:0.514444, fts:0.3048 };
+function convertSpd() {
+    const v = parseFloat(document.getElementById('spd-val').value);
+    const f = document.getElementById('spd-from').value;
+    const t = document.getElementById('spd-to').value;
+    if (isNaN(v)) { showResult('spd-result', null); return; }
+    const labels = {ms:'m/s', kmh:'km/h', mph:'mph', kn:'knot', fts:'ft/s'};
+    showResult('spd-result', fmt(v * spdToMs[f] / spdToMs[t]), labels[f], labels[t]);
+}
+function swapSpd() {
+    const f = document.getElementById('spd-from'), t = document.getElementById('spd-to');
+    [f.value, t.value] = [t.value, f.value]; convertSpd();
+}
+
+// ─── PRESSURE ────────────────────────────────────────────────────
+const presToPa = { pa:1, kpa:1000, mpa:1e6, bar:1e5, atm:101325, psi:6894.76, mmhg:133.322 };
+function convertPres() {
+    const v = parseFloat(document.getElementById('pres-val').value);
+    const f = document.getElementById('pres-from').value;
+    const t = document.getElementById('pres-to').value;
+    if (isNaN(v)) { showResult('pres-result', null); return; }
+    showResult('pres-result', fmt(v * presToPa[f] / presToPa[t]), f.toUpperCase(), t.toUpperCase());
+}
+function swapPres() {
+    const f = document.getElementById('pres-from'), t = document.getElementById('pres-to');
+    [f.value, t.value] = [t.value, f.value]; convertPres();
+}
+
+// ─── ENERGY ──────────────────────────────────────────────────────
+const eneToJ = { j:1, kj:1000, cal:4.184, kcal:4184, wh:3600, kwh:3.6e6, ev:1.602e-19, btu:1055.06 };
+function convertEne() {
+    const v = parseFloat(document.getElementById('ene-val').value);
+    const f = document.getElementById('ene-from').value;
+    const t = document.getElementById('ene-to').value;
+    if (isNaN(v)) { showResult('ene-result', null); return; }
+    showResult('ene-result', fmt(v * eneToJ[f] / eneToJ[t]), f.toUpperCase(), t.toUpperCase());
+}
+function swapEne() {
+    const f = document.getElementById('ene-from'), t = document.getElementById('ene-to');
+    [f.value, t.value] = [t.value, f.value]; convertEne();
+}
+
+// ─── TIME ────────────────────────────────────────────────────────
+const timeToS = { ns:1e-9, us:1e-6, ms:0.001, s:1, min:60, hr:3600, day:86400, wk:604800, yr:31557600 };
+function convertTime() {
+    const v = parseFloat(document.getElementById('time-val').value);
+    const f = document.getElementById('time-from').value;
+    const t = document.getElementById('time-to').value;
+    if (isNaN(v)) { showResult('time-result', null); return; }
+    showResult('time-result', fmt(v * timeToS[f] / timeToS[t]), f.toUpperCase(), t.toUpperCase());
+}
+function swapTime() {
+    const f = document.getElementById('time-from'), t = document.getElementById('time-to');
+    [f.value, t.value] = [t.value, f.value]; convertTime();
+}
+
+// ─── RESEARCH LOG ────────────────────────────────────────────────
+let notes = JSON.parse(localStorage.getItem('arday-notes') || '[]');
+
+function renderNotes() {
+    const container = document.getElementById('saved-notes');
+    container.innerHTML = '';
+    notes.forEach((note, i) => {
+        const el = document.createElement('div');
+        el.className = 'note-item';
+        el.innerHTML = `<span>${note}</span><span class="note-delete" onclick="deleteNote(${i})">✕</span>`;
+        container.appendChild(el);
+    });
+}
+
+function saveNote() {
+    const val = document.getElementById('log-input').value.trim();
+    if (!val) return;
+    notes.unshift(val);
+    localStorage.setItem('arday-notes', JSON.stringify(notes));
+    document.getElementById('log-input').value = '';
+    renderNotes();
+}
+
+function deleteNote(i) {
+    notes.splice(i, 1);
+    localStorage.setItem('arday-notes', JSON.stringify(notes));
+    renderNotes();
+}
+
+function clearLog() {
+    document.getElementById('log-input').value = '';
+}
+
+renderNotes();
+</script>
+
+</body>
+</html>
