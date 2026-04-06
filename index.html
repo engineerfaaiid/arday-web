@@ -3,105 +3,537 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arday | Official website</title>
+    <title>Arday | Official Website</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #1a2a3a; --gold: #d4af37; --bg: #f4f7f6; --text: #333; }
-        body { font-family: 'Georgia', serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; }
-        
-        /* Header & Identity */
-        header { background: white; padding: 40px 20px; text-align: center; border-bottom: 3px solid var(--primary); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .logo { font-size: 2.5rem; color: var(--primary); margin: 0; letter-spacing: 2px; }
-        .live-info { font-family: sans-serif; font-size: 0.8rem; color: #888; margin-top: 10px; text-transform: uppercase; letter-spacing: 1px; }
-        
-        /* Navigation */
-        nav { background: var(--primary); padding: 10px; text-align: center; }
-        nav a { color: white; text-decoration: none; margin: 0 15px; font-family: sans-serif; font-weight: bold; font-size: 0.9rem; transition: 0.3s; }
-        nav a:hover { color: var(--gold); }
+        :root {
+            --ink:     #0a0f1a;
+            --som-sky: #4189dd;
+            --som-mid: #2a6bbf;
+            --som-deep:#0d3d8a;
+            --gold:    #c9a84c;
+            --gold2:   #e8c96a;
+            --paper:   #f0ece4;
+            --text:    #c9d1d9;
+            --muted:   #6b7280;
+            --edge:    rgba(255,255,255,0.07);
+            --white:   #ffffff;
+            --green:   #3ecf8e;
+        }
 
-        /* Main Content */
-        main { max-width: 600px; margin: 30px auto; padding: 0 20px; flex: 1; width: 100%; }
-        
-        /* The "Updateable" Section */
-        .section-label { font-family: sans-serif; font-weight: bold; color: var(--gold); border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-bottom: 20px; display: block; }
-        .news-card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.03); margin-bottom: 20px; border-left: 5px solid var(--primary); }
-        .post-date { font-family: sans-serif; font-size: 0.75rem; color: #aaa; display: block; margin-bottom: 10px; }
-        
-        /* Footer */
-        footer { background: #fff; border-top: 1px solid #eee; padding: 30px 20px; text-align: center; font-family: sans-serif; font-size: 0.8rem; color: #999; }
-        .footer-line { width: 50px; height: 2px; background: var(--gold); margin: 15px auto; }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
 
-        @media (max-width: 480px) { .logo { font-size: 1.8rem; } }
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--ink);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+           SOMALI FLAG BACKGROUND
+        \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */
+        .flag-bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        /* Flag base: deep Somali blue fading to dark */
+        .flag-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                180deg,
+                rgba(65,137,221,0.18) 0%,
+                rgba(42,107,191,0.12) 30%,
+                rgba(13,61,138,0.08) 60%,
+                transparent 100%
+            );
+        }
+
+        /* Subtle flag stripe watermark */
+        .flag-stripe {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 100%;
+            background: repeating-linear-gradient(
+                180deg,
+                rgba(65,137,221,0.03) 0px,
+                rgba(65,137,221,0.03) 1px,
+                transparent 1px,
+                transparent 80px
+            );
+        }
+
+        /* The large Somali star watermark */
+        .star-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -55%);
+            width: min(70vw, 500px);
+            height: min(70vw, 500px);
+            opacity: 0.04;
+            animation: starPulse 8s ease-in-out infinite;
+        }
+
+        @keyframes starPulse {
+            0%, 100% { opacity: 0.04; transform: translate(-50%, -55%) scale(1); }
+            50%       { opacity: 0.07; transform: translate(-50%, -55%) scale(1.03); }
+        }
+
+        /* Atmospheric glow */
+        .glow-1 {
+            position: absolute;
+            width: 600px; height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(65,137,221,0.15) 0%, transparent 70%);
+            top: -100px; left: -100px;
+            animation: drift 14s ease-in-out infinite;
+        }
+        .glow-2 {
+            position: absolute;
+            width: 400px; height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%);
+            bottom: 10%; right: -50px;
+            animation: drift 18s ease-in-out infinite reverse;
+        }
+
+        @keyframes drift {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(20px, -20px); }
+        }
+
+        /* Grid overlay */
+        .grid-overlay {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(65,137,221,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(65,137,221,0.04) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        /* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+           LAYOUT
+        \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */
+        .page {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+           HEADER WITH DOLPHINS
+        \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */
+        header {
+            text-align: center;
+            padding: 48px 20px 36px;
+            position: relative;
+            opacity: 0;
+            animation: rise 0.7s ease 0.1s forwards;
+        }
+
+        /* Dolphin scene container */
+        .dolphin-scene {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto 20px;
+            height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Left dolphin */
+        .dolphin-left {
+            position: absolute;
+            left: 0;
+            bottom: 10px;
+            width: 160px;
+            animation: dolphinLeft 4s ease-in-out infinite;
+            transform-origin: right center;
+        }
+
+        /* Right dolphin \u2014 mirrored */
+        .dolphin-right {
+            position: absolute;
+            right: 0;
+            bottom: 10px;
+            width: 160px;
+            transform: scaleX(-1);
+            animation: dolphinRight 4s ease-in-out infinite;
+            transform-origin: left center;
+        }
+
+        @keyframes dolphinLeft {
+            0%, 100% { transform: rotate(-5deg) translateY(0px); }
+            50%       { transform: rotate(3deg) translateY(-8px); }
+        }
+        @keyframes dolphinRight {
+            0%, 100% { transform: scaleX(-1) rotate(-5deg) translateY(0px); }
+            50%       { transform: scaleX(-1) rotate(3deg) translateY(-8px); }
+        }
+
+        /* Water ripple under dolphins */
+        .water-line {
+            position: absolute;
+            bottom: 0;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(65,137,221,0.4), var(--gold), rgba(65,137,221,0.4), transparent);
+            border-radius: 2px;
+        }
+        .water-line::after {
+            content: '';
+            position: absolute;
+            inset: -4px 5% -4px;
+            background: linear-gradient(90deg, transparent, rgba(65,137,221,0.15), transparent);
+            border-radius: 50%;
+        }
+
+        /* Central star in dolphin scene */
+        .center-star {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: starSpin 20s linear infinite;
+        }
+        @keyframes starSpin {
+            from { transform: translateX(-50%) rotate(0deg); }
+            to   { transform: translateX(-50%) rotate(360deg); }
+        }
+
+        /* Logo */
+        .logo-wrap {
+            margin-bottom: 8px;
+        }
+
+        .logo-eyebrow {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.62rem;
+            letter-spacing: 0.3em;
+            color: var(--gold);
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        .logo-eyebrow::before,
+        .logo-eyebrow::after {
+            content: '';
+            width: 40px; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold));
+        }
+        .logo-eyebrow::after {
+            background: linear-gradient(90deg, var(--gold), transparent);
+        }
+
+        h1.logo {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.8rem, 10vw, 4.8rem);
+            font-weight: 700;
+            color: var(--paper);
+            letter-spacing: 0.12em;
+            line-height: 1;
+            text-shadow: 0 0 60px rgba(201,168,76,0.2);
+        }
+
+        h1.logo span { color: var(--gold); }
+
+        .logo-so {
+            font-style: italic;
+            font-weight: 400;
+            font-size: 0.6em;
+            color: var(--som-sky);
+            letter-spacing: 0.05em;
+        }
+
+        .live-clock {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.68rem;
+            color: var(--muted);
+            letter-spacing: 0.08em;
+            margin-top: 10px;
+            padding: 6px 16px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--edge);
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        /* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+           NAV
+        \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */
+        nav.main-nav {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            padding: 0 20px 24px;
+            opacity: 0;
+            animation: rise 0.6s ease 0.3s forwards;
+        }
+
+        nav.main-nav a {
+            text-decoration: none;
+            color: var(--muted);
+            font-family: 'DM Mono', monospace;
+            font-size: 0.72rem;
+            letter-spacing: 0.1em;
+            padding: 9px 18px;
+            border-radius: 10px;
+            border: 1px solid transparent;
+            transition: all 0.25s ease;
+        }
+        nav.main-nav a:hover, nav.main-nav a.active {
+            color: var(--gold);
+            border-color: rgba(201,168,76,0.25);
+            background: rgba(201,168,76,0.06);
+        }
+
+        /* Divider */
+        .nav-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(65,137,221,0.3), var(--gold), rgba(65,137,221,0.3), transparent);
+            margin: 0 20px;
+            opacity: 0;
+            animation: rise 0.6s ease 0.4s forwards;
+        }
+
+        /* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+           MAIN CONTENT
+        \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */
+        main {
+            flex: 1;
+            max-width: 600px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 32px 20px 40px;
+        }
+
+        /* Section label */
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.62rem;
+            letter-spacing: 0.2em;
+            color: var(--gold);
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: rise 0.6s ease 0.5s forwards;
+        }
+        .section-label::after {
+            content: '';
+            flex: 1; height: 1px;
+            background: linear-gradient(90deg, rgba(201,168,76,0.3), transparent);
+        }
+
+        /* Cards */
+        .news-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--edge);
+            border-radius: 18px;
+            padding: 24px;
+            margin-bottom: 16px;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.3s ease, transform 0.3s ease, background 0.3s ease;
+            opacity: 0;
+            animation: rise 0.6s ease forwards;
+        }
+        .news-card:nth-child(1) { animation-delay: 0.55s; }
+        .news-card:nth-child(2) { animation-delay: 0.65s; }
+        .news-card:nth-child(3) { animation-delay: 0.75s; }
+        .news-card:nth-child(4) { animation-delay: 0.85s; }
+
+        .news-card:hover {
+            border-color: rgba(201,168,76,0.25);
+            background: rgba(201,168,76,0.03);
+            transform: translateY(-2px);
+        }
+
+        /* Left accent bar */
+        .news-card::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 16px; bottom: 16px;
+            width: 3px;
+            background: linear-gradient(180deg, var(--som-sky), var(--gold));
+            border-radius: 0 3px 3px 0;
+        }
+        .news-card.gold::before {
+            background: linear-gradient(180deg, var(--gold), var(--gold2));
+        }
+        .news-card.quote::before {
+            background: linear-gradient(180deg, var(--green), var(--som-sky));
+        }
+
+        .post-date {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.62rem;
+            letter-spacing: 0.12em;
+            color: var(--muted);
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .news-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.05rem;
+            font-weight: 400;
+            color: var(--paper);
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .news-card p {
+            font-size: 0.85rem;
+            color: var(--muted);
+            line-height: 1.7;
+            font-weight: 300;
+        }
+
+        .news-card strong { color: var(--gold); font-weight: 500; }
+
+        /* Quote card special style */
+        .news-card.quote {
+            text-align: center;
+            padding: 28px 32px;
+        }
+        .news-card.quote h3 {
+            font-style: italic;
+            font-size: 1.1rem;
+            color: var(--paper);
+        }
+        .news-card.quote .quote-attr {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.62rem;
+            letter-spacing: 0.15em;
+            color: var(--green);
+            text-transform: uppercase;
+            margin-top: 12px;
+            display: block;
+        }
+
+        /* Tag badges */
+        .tag {
+            display: inline-block;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.58rem;
+            letter-spacing: 0.1em;
+            padding: 3px 9px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        .tag-blue  { background: rgba(65,137,221,0.12); color: var(--som-sky); border: 1px solid rgba(65,137,221,0.2); }
+        .tag-gold  { background: rgba(201,168,76,0.1);  color: var(--gold);    border: 1px solid rgba(201,168,76,0.2); }
+        .tag-green { background: rgba(62,207,142,0.1);  color: var(--green);   border: 1px solid rgba(62,207,142,0.2); }
+
+        /* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+           FOOTER
+        \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */
+        footer {
+            text-align: center;
+            padding: 36px 20px 48px;
+            border-top: 1px solid var(--edge);
+            margin-top: 20px;
+        }
+
+        .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: rgba(255,255,255,0.06);
+            letter-spacing: 0.2em;
+            margin-bottom: 10px;
+        }
+
+        .footer-tagline {
+            font-size: 0.82rem;
+            color: var(--muted);
+            font-weight: 300;
+            line-height: 1.6;
+            max-width: 340px;
+            margin: 0 auto 16px;
+        }
+
+        .footer-line {
+            width: 50px; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin: 16px auto;
+        }
+
+        .footer-copy {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.6rem;
+            color: rgba(255,255,255,0.15);
+            letter-spacing: 0.12em;
+        }
+
+        /* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+           ANIMATION
+        \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */
+        @keyframes rise {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .dolphin-left, .dolphin-right { width: 110px; }
+            .dolphin-scene { height: 110px; }
+            h1.logo { font-size: 2.4rem; }
+            nav.main-nav a { padding: 8px 12px; font-size: 0.68rem; }
+        }
     </style>
 </head>
 <body>
 
-<header>
-    <h1 class="logo">ARDAY.SO</h1>
-    <div class="live-info" id="live-clock">System Loading...</div>
-</header>
+<!-- \u2500\u2500 BACKGROUND \u2500\u2500 -->
+<div class="flag-bg">
+    <div class="flag-stripe"></div>
+    <div class="grid-overlay"></div>
+    <div class="glow-1"></div>
+    <div class="glow-2"></div>
 
-<nav>
-    <a href="/">HOME</a>
-    <a href="/research">LAB & APPS</a>
-    <a href="/contact">CONTACT</a>
-</nav>
+    <!-- Large Somali star watermark -->
+    <svg class="star-bg" viewBox="0 0 100 100" fill="white" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="50,5 61,35 95,35 68,57 79,91 50,70 21,91 32,57 5,35 39,35"/>
+    </svg>
+</div>
 
-<main>
-    <span class="section-label">LATEST RESEARCH & UPDATES    <article class="news-card">
-        <span class="post-date">APRIL 5, 2026</span>
-        <h3 style="margin: 0 0 10px 0; color: var(--primary);">MY NEW RESEARCH POST IS HERE</h3>
-    </article>
-<nav> Experimental </nav>
+<!-- \u2500\u2500 PAGE \u2500\u2500 -->
+<div class="page">
 
-<main>
-    <span class="section-label">LATEST RESEARCH & UPDATES</span>
+    <!-- HEADER -->
+    <header>
+        <!-- Dolphin scene -->
+        <div class="dolphin-scene">
 
-    <article class="news-card"> HOPE YOU'RE FEELING WELL</article> 
-
-    <article class="news-card"> every expert was once a student "ARDAY" </article>
-</main>
-
-<footer> Thanks for your visiting, we'll keep you updated</footer>
-</span>
-
-    <article class="news-card">
-        <span class="post-date">APRIL 5, 2026</span>
-        <h3 style="margin: 0 0 10px 0; color: var(--primary);">System Launch: Arday Framework v1.O.0</h3>
-        <p style="margin: 0;">Today we officially launched the modular framework for { ARDAY.SO } This setup allows for rapid updates to Somali scientific documentation and Physics research tracking.</p>
-    </article>
-
-    <article class="news-card" style="border-left-color: var(--gold);">
-        <span class="post-date">HARDWARE TRACKER</span>
-        <h3 style="margin: 0 0 10px 0; color: var(--primary);">Snapdragon X2 Elite Goal</h3>
-        <p style="margin: 0;">Optimization for <strong>32GB RAM / 1TB SSD</strong> configurations remains the primary hardware benchmark for our upcoming Physics simulations.</p>
-    </article>
-
-</main>
-
-<footer>
-    <div class="footer-line"></div>
-    <strong>ARDAY RESEARCH HUB</strong><br>
-    Providing a bridge between Somali Science and Modern Technology.<br>
-    <span style="color: #ccc; font-size: 0.7rem; margin-top: 10px; display: block;">&copy; 2026 | BUILT BY A STUDENT+</span>
-</footer>
-
-<script>
-    function updateClock() {
-        const now = new Date();
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        const dateStr = now.toLocaleDateString('en-US', options);
-        const timeStr = now.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit' });
-        
-        const hour = now.getHours();
-        let phase = "Evening Phase";
-        if (hour < 12) phase = "Morning Phase";
-        else if (hour < 18) phase = "Afternoon Phase";
-
-        document.getElementById('live-clock').innerHTML = `${dateStr} | ${timeStr} | ${phase}`;
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
-</script>
-
-</body>
-</html>
+            <!-- Left Dolphin (SVG) -->
+            <svg class="dolphin-left" viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Body -->
+                <path d="M10 70 Q40 20 100 45 Q140 60 170 50 Q185 45 190 55 Q185 65 170 68 Q140 75 100 65 Q60 55 30 85 Z"
+                    fill="url(#dpGrad1)" opacity="0.95"/>
+                <!-- Belly highlight -->
+                <path d="M30 75 Q60 60 100 62 Q140 65 168 60 Q180 58 185 62 Q180 68 168 68 Q140 72 100 68 Q60 62 35 80 Z"
+                    fill="
